@@ -25,7 +25,7 @@ exports.app.use((0, cookie_parser_1.default)());
 exports.app.use(
   (0, cors_1.default)({
     // origin: ["http://localhost:3000"],
-    origin: ["https://my-portfolio-frontend-ebon.vercel.app"],
+    origin: ["https://portfolio-frontend-ten-omega.vercel.app/"],
     credentials: true,
   })
 );
