@@ -8,8 +8,7 @@ const catchAsyncError_1 = require("../middleware/catchAsyncError");
 const blogRequest_model_1 = __importDefault(require("../models/blogRequest.model"));
 // create blog
 exports.createBlogRequest = (0, catchAsyncError_1.CatchAsyncError)(async (data, res) => {
-    const userEmail = data.email;
-    const blogRequest = await blogRequest_model_1.default.create(userEmail);
+    const blogRequest = await blogRequest_model_1.default.create(data);
     console.log(blogRequest);
     res.status(201).json({
         success: true,

@@ -1,5 +1,4 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
-import { IUser } from "./user.model";
 
 interface IBlogRequest extends Document {
   email: string;
