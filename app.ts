@@ -7,6 +7,8 @@ import projectRouter from "./routes/project.route";
 import cookieParser from "cookie-parser";
 import layoutRouter from "./routes/layout.route";
 import contactRouter from "./routes/contact.route";
+import blogRouter from "./routes/blog.route";
+import blogRequestRouter from "./routes/blogRequest.route";
 require("dotenv").config();
 
 export const app = express();
@@ -34,7 +36,15 @@ const limiter = rateLimit({
 });
 
 // routes
-app.use("/api/v1", userRouter, projectRouter, layoutRouter, contactRouter);
+app.use(
+  "/api/v1",
+  userRouter,
+  projectRouter,
+  layoutRouter,
+  contactRouter,
+  blogRouter,
+  blogRequestRouter
+);
 
 // testing api
 app.get("/test", (req: Request, res: Response, next: NextFunction) => {

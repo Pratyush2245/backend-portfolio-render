@@ -11,4 +11,11 @@ const layoutRouter = express_1.default.Router();
 layoutRouter.post("/create-layout", user_controller_1.updateAccessToken, auth_1.isAuthenticated, (0, auth_1.authorizeRoles)("admin"), layout_controller_1.createLayout);
 layoutRouter.put("/edit-layout", user_controller_1.updateAccessToken, auth_1.isAuthenticated, (0, auth_1.authorizeRoles)("admin"), layout_controller_1.editLayout);
 layoutRouter.get("/get-layout", layout_controller_1.getLayout);
+layoutRouter.post("/create-blog-layout", 
+// updateAccessToken,
+// isAuthenticated,
+// authorizeRoles("admin"),
+layout_controller_1.createBlogLayout);
+layoutRouter.put("/edit-blog-layout", user_controller_1.updateAccessToken, auth_1.isAuthenticated, (0, auth_1.authorizeRoles)("admin"), layout_controller_1.editBlogLayout);
+layoutRouter.get("/get-blog-layout", layout_controller_1.getBlogLayout);
 exports.default = layoutRouter;

@@ -3,10 +3,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getLayout = exports.editLayout = exports.createLayout = void 0;
+exports.getBlogLayout = exports.editBlogLayout = exports.createBlogLayout = exports.getLayout = exports.editLayout = exports.createLayout = void 0;
 const ErrorHandler_1 = __importDefault(require("../utils/ErrorHandler"));
 const catchAsyncError_1 = require("../middleware/catchAsyncError");
 const layout_model_1 = __importDefault(require("../models/layout.model"));
+const blogCategories_model_1 = __importDefault(require("../models/blogCategories.model"));
 // create layout
 exports.createLayout = (0, catchAsyncError_1.CatchAsyncError)(async (req, res, next) => {
     try {
@@ -56,6 +57,61 @@ exports.getLayout = (0, catchAsyncError_1.CatchAsyncError)(async (req, res, next
         res.status(201).json({
             success: true,
             layout,
+        });
+    }
+    catch (error) {
+        return next(new ErrorHandler_1.default(error.message, 500));
+    }
+});
+// create layout
+exports.createBlogLayout = (0, catchAsyncError_1.CatchAsyncError)(async (req, res, next) => {
+    try {
+        const { categories } = req.body;
+        const catergoryItems = await Promise.all(categories.map(async (category) => {
+            return {
+                title: category.title,
+            };
+        }));
+        await blogCategories_model_1.default.create({
+            categories: catergoryItems,
+        });
+        res.status(200).json({
+            success: true,
+            message: "Category created successfully",
+        });
+    }
+    catch (error) {
+        return next(new ErrorHandler_1.default(error.message, 500));
+    }
+});
+// edit layout
+exports.editBlogLayout = (0, catchAsyncError_1.CatchAsyncError)(async (req, res, next) => {
+    try {
+        const { categories } = req.body;
+        const catergoryItems = await Promise.all(categories.map(async (category) => {
+            return {
+                title: category.title,
+            };
+        }));
+        await blogCategories_model_1.default.findByIdAndUpdate({
+            categories: catergoryItems,
+        });
+        res.status(200).json({
+            success: true,
+            message: "Category updated successfully",
+        });
+    }
+    catch (error) {
+        return next(new ErrorHandler_1.default(error.message, 500));
+    }
+});
+// get layout
+exports.getBlogLayout = (0, catchAsyncError_1.CatchAsyncError)(async (req, res, next) => {
+    try {
+        const categories = await blogCategories_model_1.default.find();
+        res.status(201).json({
+            success: true,
+            categories,
         });
     }
     catch (error) {
