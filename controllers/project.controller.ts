@@ -47,9 +47,11 @@ export const editProject = CatchAsyncError(
       const projectData = (await ProjectModal.findById(projectId)) as any;
 
       if (thumbnail && !thumbnail.startsWith("https")) {
-        await cloudinary.v2.uploader.destroy(
-          projectData?.projectThumbnail?.public_id
-        );
+        if (projectData?.projectThumbnail?.public_id) {
+          await cloudinary.v2.uploader.destroy(
+            projectData?.projectThumbnail?.public_id
+          );
+        }
         const myCloud = await cloudinary.v2.uploader.upload(thumbnail, {
           folder: "projects",
         });

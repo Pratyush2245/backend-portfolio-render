@@ -41,7 +41,9 @@ exports.editProject = (0, catchAsyncError_1.CatchAsyncError)(async (req, res, ne
         const projectId = req.params.id;
         const projectData = (await project_model_1.default.findById(projectId));
         if (thumbnail && !thumbnail.startsWith("https")) {
-            await cloudinary_1.default.v2.uploader.destroy(projectData?.projectThumbnail?.public_id);
+            if (projectData?.projectThumbnail?.public_id) {
+                await cloudinary_1.default.v2.uploader.destroy(projectData?.projectThumbnail?.public_id);
+            }
             const myCloud = await cloudinary_1.default.v2.uploader.upload(thumbnail, {
                 folder: "projects",
             });

@@ -44,9 +44,11 @@ export const editBlog = CatchAsyncError(
       const blogData = (await BlogModal.findById(blogId)) as any;
 
       if (thumbnail && !thumbnail.startsWith("https")) {
-        await cloudinary.v2.uploader.destroy(
-          blogData?.blogThumbnail?.public_id
-        );
+        if (blogData?.blogThumbnail?.public_id) {
+          await cloudinary.v2.uploader.destroy(
+            blogData?.blogThumbnail?.public_id
+          );
+        }
         const myCloud = await cloudinary.v2.uploader.upload(thumbnail, {
           folder: "blogs",
         });
