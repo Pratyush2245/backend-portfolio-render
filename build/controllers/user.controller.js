@@ -135,12 +135,29 @@ exports.socialAuth = (0, catchAsyncError_1.CatchAsyncError)(async (req, res, nex
         const { email, name, avatar } = req.body;
         const user = await user_model_1.default.findOne({ email });
         if (!user) {
-            const newUser = await user_model_1.default.create({
-                email,
-                name,
-                avatar,
-            });
-            (0, jwt_1.sendToken)(newUser, 200, res);
+           if (avatar) {
+                // if user already have an avatar then call this if first
+                const myCloud = await cloudinary_1.default.v2.uploader.upload(avatar, {
+                    folder: "avatars",
+                    width: 150,
+                });
+                const newUser = await user_model_1.default.create({
+                    email,
+                    name,
+                    avatar: {
+                        public_id: myCloud.public_id,
+                        url: myCloud.secure_url,
+                    },
+                });
+                (0, jwt_1.sendToken)(newUser, 200, res);
+            }
+            else {
+                const newUser = await user_model_1.default.create({
+                    email,
+                    name,
+                });
+                (0, jwt_1.sendToken)(newUser, 200, res);
+            }
         }
         else {
             (0, jwt_1.sendToken)(user, 200, res);
