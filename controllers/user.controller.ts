@@ -186,12 +186,28 @@ export const socialAuth = CatchAsyncError(
       const { email, name, avatar } = req.body as ISocialAuthBody;
       const user = await userModal.findOne({ email });
       if (!user) {
-        const newUser = await userModal.create({
-          email,
-          name,
-          avatar,
-        });
-        sendToken(newUser, 200, res);
+        if (avatar) {
+          // if user already have an avatar then call this if first
+          const myCloud = await cloudinary.v2.uploader.upload(avatar, {
+            folder: "avatars",
+            width: 150,
+          });
+          const newUser = await userModal.create({
+            email,
+            name,
+            avatar: {
+              public_id: myCloud.public_id,
+              url: myCloud.secure_url,
+            },
+          });
+          sendToken(newUser, 200, res);
+        } else {
+          const newUser = await userModal.create({
+            email,
+            name,
+          });
+          sendToken(newUser, 200, res);
+        }
       } else {
         sendToken(user, 200, res);
       }
